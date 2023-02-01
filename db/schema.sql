@@ -11,7 +11,7 @@ CREATE TABLE movies (
 
 DROP TABLE IF EXISTS reviews;
 CREATE TABLE reviews (
-    id INT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     movie_id INT,
     review TEXT,
     FOREIGN KEY(movie_id)

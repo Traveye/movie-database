@@ -14,7 +14,7 @@ const db = mysql.createConnection(
     // MySQL username,
     user: 'root',
     // MySQL password
-    password: 'password',
+    password: 'Password@123',
     database: 'movies_db'
   },
   console.log(`Connected to the movies_db database.`)
@@ -26,8 +26,9 @@ const db = mysql.createConnection(
 // })
 
 app.post('/api/add-movie', (req, res) => {
-    const newMovie = req.body;
-    db.query('INSERT INTO movies (movie_name) VALUES (?)'),[newMovie.movie_name], (err, result) =>{
+    const newMovie = req.body.movie_name;
+    console.log(newMovie);
+    db.query(`INSERT INTO movies (movie_name) VALUES (?);`, newMovie, (err, result) =>{
         if(err){
         throw err;
         res.json(err)
@@ -35,8 +36,36 @@ app.post('/api/add-movie', (req, res) => {
   
         console.log('New movie added')
         res.json(result)
-    }
-})
+    })
+});
+
+app.get('/api/movies', (req, res) => {
+    
+
+    db.query(`SELECT * FROM movies;`, (err, result) =>{
+        if(err){
+        throw err;
+        res.json(err)
+        }
+  
+        console.log('Here are all the movies')
+        res.json(result)
+    })
+});
+
+app.delete('/api/movie/:id', (req, res) => {
+    num = req.body; 
+
+    db.query(`DELETE FROM movies WHERE id = ?`, num,(err, result) =>{
+        if(err){
+        throw err;
+        res.json(err)
+        }
+  
+        console.log('movie deleted')
+        res.json(result)
+    })
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
