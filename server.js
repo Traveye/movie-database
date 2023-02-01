@@ -14,7 +14,7 @@ const db = mysql.createConnection(
     // MySQL username,
     user: 'root',
     // MySQL password
-    password: 'Password@123',
+    password: 'password',
     database: 'movies_db'
   },
   console.log(`Connected to the movies_db database.`)
@@ -67,6 +67,31 @@ app.delete('/api/movie/:id', (req, res) => {
     })
 });
 
+app.get('/api/movies-reviews', (req,res) =>{
+
+db.query(`SELECT * FROM movies LEFT JOIN reviews ON movies.id = reviews.movie_id`, (err, result) =>{
+    if(err){
+    throw err;
+    res.json(err)
+    }
+
+    console.log('Here is a list of movie reviews')
+    res.json(result)
+})
+app.put('/api/review/:id', (req, res) =>{
+
+    let reviewUpdate = req.body.review;
+    let reviewID = req.body.id;
+
+    dq.query(`UPDATE reviews SET review= ? WHERE id = ?`, [reviewUpdate, reviewID], (err, result) => {
+        if(err){
+            throw err;
+        }
+        console.log("Updated review")
+        res.json(result);
+    })
+})
+})
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
